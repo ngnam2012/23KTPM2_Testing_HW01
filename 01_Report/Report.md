@@ -367,12 +367,12 @@ Self-assessed grade:
 | 12 | Atlassian Confluence OGNL injection RCE | 2022 | Remote Code Execution | No | Critical | NVD |
 | 13 | MOVEit Transfer SQL injection vulnerability | 2023 | SQL Injection / Data breach risk | No | Critical | NVD |
 | 14 | Citrix NetScaler ADC/ Gateway code injection | 2023 | Code Injection | No | Critical | NVD |
-| 15 | libwebp heap buffer overflow in Chrome/ libwebp | 2023 | Memory corruption | No | Critical | NVD |
+| 15 | libwebp heap buffer overflow in Chrome/ libwebp | 2023 | Memory corruption | No | High by NVD / Critical by Chromium | NVD |
 | 16 | XZ Utils malicious code / supply-chain backdoor | 2024 | Supply-chain compromise | No | Critical | NVD |
 | 17 | OpenSSH regreSSHion race condition | 2024 | Security regression / Race condition | No | High | NVD |
 | 18 | Palo Alto PAN-OS Global Protect command injection | 2024 | Command Injection | No | Critical | NVD |
-| 19 | Apache Tomcat path equivalence RCE / information disclosure | 2025 | RCE/ Information Disclosure | No | High | NVD |
-| 20 | Microsoft Edge Chromium-based remote code execution vulnerability | 2026 | Remote Code Execution | No | Critical | NVD |
+| 19 | Apache Tomcat path equivalence RCE / information disclosure | 2025 | RCE/ Information Disclosure | No | Critical | NVD |
+| 20 | Microsoft Edge Chromium-based remote code execution vulnerability | 2026 | Remote Code Execution | No | Critical by NVD / High by Microsoft CNA | NVD |
 
 ---
 
@@ -387,7 +387,7 @@ Self-assessed grade:
 * **Severity:** Medium-High
 * **Reason for severity:** The defect can mislead users because the chatbot appears to answer from a trusted dataset while actually generating unsupported information. The severity becomes higher if the chatbot is used for customer support, business decisions, legal advice, finance, or healthcare.
 * **Consequences:** Users may receive wrong answers, lose trust in the chatbot, or make decisions based on hallucinated information. The system may also violate its intended requirement to answer only from retrieved data.
-* **Solution:** The system should enforce retrieval when grounded answers are required, check whether retrieval results exist before generating an answer, refuse to answer when no relevant context is retrieved, log tool calls, tune retrieval thresholds, and repeatedly test similar queries for consistency.
+* **Solution:** Set tool_choice to "required" when strict grounding is required, so the model must call file_search before answering. Also add guardrails: refuse when no relevant retrieved context exists, log tool calls, and test repeated/near-identical queries for retrieval consistency.
 
 #### 2.2.2 Defect 02 - ChatGPT produced false legal citations in Mata v. Avianca
 * **Source:** [AI Incident Database - Incident 541](https://incidentdatabase.ai/cite/541/)
@@ -538,7 +538,7 @@ Self-assessed grade:
 * **Type:** Memory corruption / Heap buffer overflow
 * **AI/LLM-related:** No
 * **Description:** A heap buffer overflow in libwebp affected Google Chrome and libwebp before fixed versions. A crafted HTML page could trigger out-of-bounds memory writes.
-* **Severity:** Critical
+* **Severity:** High according to NVD CVSS 3.1 / Critical according to Chromium security severity.
 * **Reason for severity:** The vulnerability affected a widely used image processing library and browser attack surface, making remote exploitation through crafted content possible.
 * **Consequences:** Attackers could potentially execute code, crash applications, or compromise users who viewed malicious WebP content.
 * **Solution:** Update Chrome, libwebp, and applications that bundle vulnerable versions. Developers should also track vulnerable transitive dependencies.
@@ -582,8 +582,8 @@ Self-assessed grade:
 * **Type:** Remote Code Execution / Information Disclosure
 * **AI/LLM-related:** No
 * **Description:** Apache Tomcat had a path equivalence vulnerability related to internal-dot file names. Under certain conditions, the issue could lead to remote code execution, information disclosure, or malicious content being added to uploaded files when the Default Servlet was write-enabled.
-* **Severity:** High
-* **Reason for severity:** The severity is High because Apache Tomcat is widely used for Java web applications. A vulnerability that may lead to remote code execution or information disclosure in a web server component can seriously affect confidentiality, integrity, and availability.
+* **Severity:** Critical
+* **Reason for severity:** The severity is Critical because Apache Tomcat is widely used for Java web applications. A vulnerability that may lead to remote code execution or information disclosure in a web server component can seriously affect confidentiality, integrity, and availability.
 * **Consequences:** Attackers could potentially read sensitive information, add malicious content to uploaded files, or execute code depending on server configuration. This could lead to data exposure, application compromise, or further attacks against the server.
 * **Solution:** Upgrade Apache Tomcat to a fixed version, disable unsafe write-enabled Default Servlet configurations, restrict upload behavior, validate file paths carefully, and review server configuration for risky defaults.
 
@@ -593,7 +593,7 @@ Self-assessed grade:
 * **Type:** Remote Code Execution
 * **AI/LLM-related:** No
 * **Description:** Microsoft Edge Chromium-based versions had a remote code execution vulnerability identified as CVE-2026-45495. Browser remote code execution vulnerabilities are dangerous because they may be triggered through crafted web content or browser attack surfaces.
-* **Severity:** Critical
+* **Severity:** Critical by NVD CVSS 3.1/ High by Microsoft CNA CVSS 3.1.
 * **Reason for severity:** The severity is Critical because Microsoft Edge is a widely used browser. If successfully exploited, a browser RCE vulnerability can allow attackers to execute code in the context of the browser user and potentially compromise the user's system.
 * **Consequences:** Attackers may execute malicious code, steal data, compromise browser sessions, install malware, or use the browser compromise as a starting point for further attacks.
 * **Solution:** Update Microsoft Edge to the latest patched version, enable automatic browser updates, use endpoint protection, avoid untrusted websites or suspicious links, and ensure enterprise browsers are centrally managed and patched quickly.
