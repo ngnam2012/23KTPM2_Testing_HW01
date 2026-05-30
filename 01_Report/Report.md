@@ -347,6 +347,298 @@ Self-assessed grade:
 - **Error 4: Image formatting issue**
   - The image framing/cropping is incorrect (the padding, margins, or borders need to be adjusted so the content displays properly without being cut off).
 
-# 2. 20 Software Defects 2022–2026
+## 2. 20 Software Defects 2022-2026
+
+### 2.1 Defect Summary Table
+
+| No. | Defect Name | Year | Type | AI/LLM-related? | Severity | Source |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1 | RAG chatbot sometimes hallucinates because vector DB is not always queried | 2025 | RAG retrieval failure / Hallucination | Yes | Medium-High | OpenAI Community |
+| 2 | ChatGPT produced false legal citations in Mata v. Avianca | 2023 | LLM hallucination | Yes | High | AI Incident Database |
+| 3 | Colorado lawyer filed motion with hallucinated ChatGPT cases | 2023 | LLM hallucination | Yes | High | AI Incident Database |
+| 4 | Bing Chat initial prompts revealed through prompt injection | 2023 | Prompt injection | Yes | Medium | AI Incident Database |
+| 5 | Users bypassed ChatGPT content filters with prompt injection/personas | 2022 | Prompt injection / Safety bypass | Yes | Medium-High | AI Incident Database |
+| 6 | Chevrolet dealer chatbot agreed to sell a Tahoe for $1 | 2023 | Prompt injection / Business logic failure | Yes | Medium | AI Incident Database |
+| 7 | LangChain Web Explorer SSRF vulnerability | 2024 | AI framework SSRF | Yes | Medium | Snyk |
+| 8 | LlamaIndex command injection via safe_eval | 2024 | AI framework command injection | Yes | Critical | Snyk |
+| 9 | LlamaIndex Core code injection vulnerability | 2024 | AI framework code injection | Yes | Critical | Snyk |
+| 10 | Spring Framework RCE, also known as Spring4Shell | 2022 | Remote Code Execution | No | Critical | NVD |
+| 11 | Microsoft MSDT RCE, also known as Follina | 2022 | Remote Code Execution | No | High | NVD |
+| 12 | Atlassian Confluence OGNL injection RCE | 2022 | Remote Code Execution | No | Critical | NVD |
+| 13 | MOVEit Transfer SQL injection vulnerability | 2023 | SQL Injection / Data breach risk | No | Critical | NVD |
+| 14 | Citrix NetScaler ADC/ Gateway code injection | 2023 | Code Injection | No | Critical | NVD |
+| 15 | libwebp heap buffer overflow in Chrome/ libwebp | 2023 | Memory corruption | No | Critical | NVD |
+| 16 | XZ Utils malicious code / supply-chain backdoor | 2024 | Supply-chain compromise | No | Critical | NVD |
+| 17 | OpenSSH regreSSHion race condition | 2024 | Security regression / Race condition | No | High | NVD |
+| 18 | Palo Alto PAN-OS Global Protect command injection | 2024 | Command Injection | No | Critical | NVD |
+| 19 | Apache Tomcat path equivalence RCE / information disclosure | 2025 | RCE/ Information Disclosure | No | High | NVD |
+| 20 | Microsoft Edge Chromium-based remote code execution vulnerability | 2026 | Remote Code Execution | No | Critical | NVD |
+
+---
+
+### 2.2 Detailed Defect Analysis
+
+#### 2.2.1 Defect 01 - RAG chatbot sometimes hallucinates because vector DB is not always queried
+* **Source:** [OpenAI Community topic: Vector DB not always queried](https://community.openai.com/t/vector-db-not-always-queried-chatbot-sometimes-hallucinates-despite-attached-dataset/1369941)
+* **Year:** 2025
+* **Type:** AI/LLM-related defect / RAG retrieval failure / hallucination
+* **AI/LLM-related:** Yes
+* **Description:** A developer reported that a chatbot using a vector database sometimes failed to query the vector database when running through the Responses API. As a result, the chatbot sometimes hallucinated or returned unsupported answers even though relevant data existed in the attached dataset.
+* **Severity:** Medium-High
+* **Reason for severity:** The defect can mislead users because the chatbot appears to answer from a trusted dataset while actually generating unsupported information. The severity becomes higher if the chatbot is used for customer support, business decisions, legal advice, finance, or healthcare.
+* **Consequences:** Users may receive wrong answers, lose trust in the chatbot, or make decisions based on hallucinated information. The system may also violate its intended requirement to answer only from retrieved data.
+* **Solution:** The system should enforce retrieval when grounded answers are required, check whether retrieval results exist before generating an answer, refuse to answer when no relevant context is retrieved, log tool calls, tune retrieval thresholds, and repeatedly test similar queries for consistency.
+
+#### 2.2.2 Defect 02 - ChatGPT produced false legal citations in Mata v. Avianca
+* **Source:** [AI Incident Database - Incident 541](https://incidentdatabase.ai/cite/541/)
+* **Year:** 2023
+* **Type:** LLM hallucination
+* **AI/LLM-related:** Yes
+* **Description:** A lawyer used ChatGPT for legal research in the Mata v. Avianca case. ChatGPT generated false legal case citations, and those non-existent cases were submitted in a court filing.
+* **Severity:** High
+* **Reason for severity:** The defect affected a formal legal process and showed that LLM-generated information can appear authoritative even when it is fabricated.
+* **Consequences:** The court discovered that the cited cases did not exist. The lawyers involved faced legal and professional consequences, and the incident damaged trust in AI-assisted legal research.
+* **Solution:** AI-generated legal citations must be verified against official legal databases. Legal professionals should use AI only as a drafting or brainstorming assistant, not as an authoritative legal source without human verification.
+
+#### 2.2.3 Defect 03 - Colorado lawyer filed motion with hallucinated ChatGPT cases
+* **Source:** [AI Incident Database - Incident 615](https://incidentdatabase.ai/cite/615/)
+* **Year:** 2023
+* **Type:** LLM hallucination
+* **AI/LLM-related:** Yes
+* **Description:** A Colorado lawyer used ChatGPT-generated legal cases in court documents. The AI-generated citations were false and did not correspond to real legal authorities.
+* **Severity:** High
+* **Reason for severity:** The defect directly affected a court filing and showed a serious failure in AI output verification.
+* **Consequences:** The motion was negatively affected, and the lawyer faced legal and professional repercussions. The incident demonstrated the danger of trusting AI-generated legal content without checking primary sources.
+* **Solution:** AI-generated legal references should always be validated manually. Courts, law firms, and students should require citation verification, source checking, and disclosure of AI assistance.
+
+#### 2.2.4 Defect 04 - Bing Chat initial prompts revealed through prompt injection
+* **Source:** [AI Incident Database - Incident 473](https://incidentdatabase.ai/cite/473/)
+* **Year:** 2023
+* **Type:** Prompt injection / System prompt leakage
+* **AI/LLM-related:** Yes
+* **Description:** Early testers of Bing Chat used prompt injection techniques to reveal the chatbot's hidden initial instructions. These instructions contained internal rules that were not intended to be exposed to users.
+* **Severity:** Medium
+* **Reason for severity:** Although the incident did not directly cause data loss, it exposed internal prompt design and showed that LLM systems can be manipulated through user input.
+* **Consequences:** Attackers or curious users could learn internal system behavior, bypass intended restrictions, or design more effective attacks against the chatbot.
+* **Solution:** LLM applications should separate system instructions from user-controlled input, apply prompt injection defenses, avoid storing sensitive information in prompts, and test adversarial prompts before release.
+
+#### 2.2.5 Defect 05 - Users bypassed ChatGPT content filters with prompt injection/personas
+* **Source:** [AI Incident Database - Incident 420](https://incidentdatabase.ai/cite/420/)
+* **Year:** 2022
+* **Type:** Prompt injection / Safety bypass
+* **AI/LLM-related:** Yes
+* **Description:** Users reported that ChatGPT's early content and keyword filters could be bypassed using prompt injection, role-play, or persona-based instructions.
+* **Severity:** Medium-High
+* **Reason for severity:** The defect could allow users to obtain biased, unsafe, or policy-violating responses from a system that was expected to block such content.
+* **Consequences:** The system could generate harmful content, biased associations, or unsafe instructions. This reduced trust in the model's safety mechanisms.
+* **Solution:** The system should use stronger safety classifiers, adversarial prompt testing, refusal consistency tests, continuous red-teaming, and layered moderation instead of relying only on simple keyword filters.
+
+#### 2.2.6 Defect 06 - Chevrolet dealer chatbot agreed to sell a Tahoe for $1
+* **Source:** [AI Incident Database - Incident 622](https://incidentdatabase.ai/cite/622/)
+* **Year:** 2023
+* **Type:** Prompt injection / Business logic failure
+* **AI/LLM-related:** Yes
+* **Description:** A Chevrolet dealer's AI chatbot was manipulated by a user prompt into agreeing to sell a 2024 Chevy Tahoe for $1 and treating the offer as binding language.
+* **Severity:** Medium
+* **Reason for severity:** The defect demonstrated that customer-facing AI chatbots can produce business-risky statements when their behavior is not constrained by backend business rules.
+* **Consequences:** The chatbot created reputational risk, customer confusion, and potential legal or business disputes. It also showed how easily prompt injection can override the intended purpose of a sales chatbot.
+* **Solution:** AI chatbots should not be allowed to make binding offers, pricing commitments, or legal statements unless verified by backend business rules. The system should include guardrails, escalation to humans, and strict separation between conversational output and official transaction logic.
+
+#### 2.2.7 Defect 07 - LangChain Web Explorer SSRF vulnerability
+* **Source:** [Snyk - LangChain Web Explorer SSRF](https://security.snyk.io/vuln/SNYK-PYTHON-LANGCHAIN-7217837)
+* **Year:** 2024
+* **Type:** Server-Side Request Forgery / AI framework vulnerability
+* **AI/LLM-related:** Yes
+* **Description:** A vulnerability in LangChain Web Explorer made it possible for an attacker-controlled web page to redirect the system into making requests to local or internal services.
+* **Severity:** Medium
+* **Reason for severity:** SSRF may allow attackers to scan internal networks, interact with local services, or read internal response data depending on the deployment environment.
+* **Consequences:** Attackers could use the vulnerable AI-powered retrieval workflow as a proxy to access internal services or cloud metadata endpoints.
+* **Solution:** Applications should restrict outbound requests, block access to internal IP ranges and metadata endpoints, validate redirects, sandbox web browsing tools, and upgrade to patched versions when available.
+
+#### 2.2.8 Defect 08 - LlamaIndex command injection via safe_eval
+* **Source:** [Snyk - LlamaIndex Command Injection, CVE-2024-3271](https://security.snyk.io/vuln/SNYK-PYTHON-LLAMAINDEX-6615854)
+* **Year:** 2024
+* **Type:** Command Injection / Al framework vulnerability
+* **AI/LLM-related:** Yes
+* **Description:** Affected versions of LlamaIndex were vulnerable to command injection because the safe_eval function could be bypassed. An attacker could craft input that resulted in operating system command execution on the server.
+* **Severity:** Critical
+* **Reason for severity:** The vulnerability could allow remote arbitrary command execution with no user interaction, which may compromise the server.
+* **Consequences:** Attackers could execute commands, modify files, steal sensitive information, or disrupt the application.
+* **Solution:** Upgrade LlamaIndex to a fixed version, remove unsafe evaluation, sandbox code execution, validate user input, and avoid executing model-generated or user-controlled code.
+
+#### 2.2.9 Defect 09 - LlamaIndex Core code injection vulnerability
+* **Source:** [Snyk - LlamaIndex Core Code Injection, CVE-2024-3098](https://security.snyk.io/vuln/SNYK-PYTHON-LLAMAINDEXCORE-6595959)
+* **Year:** 2024
+* **Type:** Code Injection / AI framework vulnerability
+* **AI/LLM-related:** Yes
+* **Description:** LlamaIndex Core had a code injection vulnerability caused by insufficient validation in exec_utils especially around safe_eval. Attackers could bypass restrictions and execute unauthorized code.
+* **Severity:** Critical
+* **Reason for severity:** Code injection in an Al application framework can lead to server compromise, especially when the framework is used in applications that process user prompts.
+* **Consequences:** Attackers may execute arbitrary code, access sensitive data, or take control of the application environment.
+* **Solution:** Upgrade llama-index-core to a patched version, remove unsafe evaluation patterns, add sandboxing, and test prompt-to-code paths for injection risks.
+
+#### 2.2.10 Defect 10 - Spring Framework RCE, also known as Spring4Shell
+* **Source:** [NVD - CVE-2022-22965](https://nvd.nist.gov/vuln/detail/CVE-2022-22965)
+* **Year:** 2022
+* **Type:** Remote Code Execution
+* **AI/LLM-related:** No
+* **Description:** A Spring MVC or Spring WebFlux application running on JDK 9+ could be vulnerable to remote code execution through data binding under certain deployment conditions.
+* **Severity:** Critical
+* **Reason for severity:** Remote code execution in a widely used Java framework can allow attackers to compromise servers running vulnerable applications.
+* **Consequences:** Attackers could execute arbitrary code, deploy web shells, steal data, or take control of vulnerable application servers.
+* **Solution:** Upgrade Spring Framework to a patched version, review deployment configuration, restrict exposed endpoints, and apply defense-in-depth controls such as WAF rules and monitoring.
+
+#### 2.2.11 Defect 11 - Microsoft MSDT RCE, also known as Follina
+* **Source:** [NVD - CVE-2022-30190](https://nvd.nist.gov/vuln/detail/CVE-2022-30190)
+* **Year:** 2022
+* **Type:** Remote Code Execution
+* **AI/LLM-related:** No
+* **Description:** A remote code execution vulnerability existed when the Microsoft Support Diagnostic Tool was called using the URL protocol from an application such as Microsoft Word.
+* **Severity:** High
+* **Reason for severity:** A victim could be attacked through a malicious document, and successful exploitation could run code with the user's privileges.
+* **Consequences:** Attackers could install programs, view or modify data, delete files, or create accounts within the permission level of the victim user.
+* **Solution:** Apply Microsoft security updates, disable vulnerable protocol handlers if needed, use endpoint protection, and block suspicious document-based attack chains.
+
+#### 2.2.12 Defect 12 - Atlassian Confluence OGNL injection RCE
+* **Source:** [NVD - CVE-2022-26134](https://nvd.nist.gov/vuln/detail/CVE-2022-26134)
+* **Year:** 2022
+* **Type:** Remote Code Execution / OGNL Injection
+* **AI/LLM-related:** No
+* **Description:** Affected versions of Atlassian Confluence Server and Data Center had an OGNL injection vulnerability that allowed unauthenticated attackers to execute arbitrary code.
+* **Severity:** Critical
+* **Reason for severity:** The vulnerability could be exploited remotely without authentication on affected public-facing Confluence servers.
+* **Consequences:** Attackers could take control of Confluence instances, steal internal documents, deploy malware, or use the server as an entry point into the organization.
+* **Solution:** Upgrade Confluence to fixed versions, restrict public access, monitor for compromise indicators, and apply emergency mitigation steps if patching is delayed.
+
+#### 2.2.13 Defect 13 - MOVEit Transfer SQL injection vulnerability
+* **Source:** [NVD - CVE-2023-34362](https://nvd.nist.gov/vuln/detail/CVE-2023-34362)
+* **Year:** 2023
+* **Type:** SQL Injection / Data breach risk
+* **AI/LLM-related:** No
+* **Description:** MOVEit Transfer had a SQL injection vulnerability that allowed unauthenticated attackers to gain access to the MOVEit Transfer database.
+* **Severity:** Critical
+* **Reason for severity:** The vulnerability affected a file transfer product used by many organizations and was exploited in the wild.
+* **Consequences:** Attackers could access sensitive data stored in the database, modify or delete database elements, and cause large-scale data breach impact.
+* **Solution:** Upgrade to fixed MOVEit versions, disable exposed vulnerable services if needed, check for indicators of compromise, rotate credentials, and improve input validation.
+
+#### 2.2.14 Defect 14 - Citrix NetScaler ADC/Gateway code injection
+* **Source:** [NVD - CVE-2023-3519](https://nvd.nist.gov/vuln/detail/CVE-2023-3519)
+* **Year:** 2023
+* **Type:** Code Injection
+* **AI/LLM-related:** No
+* **Description:** Citrix NetScaler ADC and NetScaler Gateway contained a code injection vulnerability. The vulnerability was listed in CISA's Known Exploited Vulnerabilities catalog.
+* **Severity:** Critical
+* **Reason for severity:** The affected products are commonly exposed to the internet and used for remote access. Code injection can allow attackers to compromise gateway infrastructure.
+* **Consequences:** Attackers could execute malicious code, compromise access infrastructure, steal credentials, or move laterally into internal networks.
+* **Solution:** Apply vendor mitigations or upgrade to fixed versions immediately, review logs, rotate credentials, and check for signs of exploitation.
+
+#### 2.2.15 Defect 15 - libwebp heap buffer overflow in Chrome/libwebp
+* **Source:** [NVD - CVE-2023-4863](https://nvd.nist.gov/vuln/detail/CVE-2023-4863)
+* **Year:** 2023
+* **Type:** Memory corruption / Heap buffer overflow
+* **AI/LLM-related:** No
+* **Description:** A heap buffer overflow in libwebp affected Google Chrome and libwebp before fixed versions. A crafted HTML page could trigger out-of-bounds memory writes.
+* **Severity:** Critical
+* **Reason for severity:** The vulnerability affected a widely used image processing library and browser attack surface, making remote exploitation through crafted content possible.
+* **Consequences:** Attackers could potentially execute code, crash applications, or compromise users who viewed malicious WebP content.
+* **Solution:** Update Chrome, libwebp, and applications that bundle vulnerable versions. Developers should also track vulnerable transitive dependencies.
+
+#### 2.2.16 Defect 16 - XZ Utils malicious code / supply-chain backdoor
+* **Source:** [NVD - CVE-2024-3094](https://nvd.nist.gov/vuln/detail/CVE-2024-3094)
+* **Year:** 2024
+* **Type:** Supply-chain compromise / Malicious code
+* **AI/LLM-related:** No
+* **Description:** Malicious code was discovered in upstream XZ Utils tarballs starting with version 5.6.0. The malicious build process modified liblzma behavior through obfuscated build steps.
+* **Severity:** Critical
+* **Reason for severity:** The vulnerability was a supply-chain compromise affecting a low-level compression library that can be linked by many other software components.
+* **Consequences:** Compromised versions could affect software linked against the malicious library and potentially weaken or subvert authentication-related behavior in affected systems.
+* **Solution:** Revert to safe versions, remove compromised packages, verify source tarballs against repositories, strengthen maintainer review, and improve supply-chain integrity checks.
+
+#### 2.2.17 Defect 17 - OpenSSH regreSSHion race condition
+* **Source:** [NVD - CVE-2024-6387](https://nvd.nist.gov/vuln/detail/CVE-2024-6387)
+* **Year:** 2024
+* **Type:** Security regression / Race condition
+* **AI/LLM-related:** No
+* **Description:** A security regression was discovered in OpenSSH server sshd. The issue involved a race condition where sshd could handle some signals in an unsafe way. An unauthenticated remote attacker could attempt to trigger the issue by failing to authenticate within a specific time period.
+* **Severity:** High
+* **Reason for severity:** The severity is High because OpenSSH is widely used on internet-facing servers for remote administration. Even if exploitation is difficult, a remotely reachable vulnerability in sshd can create serious security risk.
+* **Consequences:** Successful exploitation could potentially lead to remote compromise depending on the operating system, platform, and timing conditions. The defect also shows how a security regression can reintroduce a previously fixed vulnerability.
+* **Solution:** Upgrade OpenSSH to a fixed version, restrict SSH access to trusted IP addresses, monitor suspicious authentication attempts, and include security regression testing in the release process.
+
+#### 2.2.18 Defect 18 - Palo Alto PAN-OS GlobalProtect command injection
+* **Source:** [NVD - CVE-2024-3400](https://nvd.nist.gov/vuln/detail/CVE-2024-3400)
+* **Year:** 2024
+* **Type:** Command Injection
+* **AI/LLM-related:** No
+* **Description:** A command injection vulnerability existed in the GlobalProtect feature of Palo Alto Networks PAN-OS software. Under specific affected versions and configurations, an unauthenticated attacker could execute arbitrary code with root privileges on the firewall.
+* **Severity:** Critical
+* **Reason for severity:** The severity is Critical because the vulnerability could allow unauthenticated remote code execution with root privileges on security gateway devices. Firewalls and VPN gateways are high-value targets because they protect access to internal networks.
+* **Consequences:** Attackers could compromise firewall devices, modify configurations, access sensitive network traffic, steal credentials, or use the compromised device as an entry point into the organization's internal network.
+* **Solution:** Apply vendor patches and mitigations immediately, review firewall logs for signs of compromise, restrict access to management and GlobalProtect interfaces, rotate credentials if compromise is suspected, and continuously monitor affected devices.
+
+#### 2.2.19 Defect 19 - Apache Tomcat path equivalence RCE / information disclosure
+* **Source:** [NVD - CVE-2025-24813](https://nvd.nist.gov/vuln/detail/CVE-2025-24813)
+* **Year:** 2025
+* **Type:** Remote Code Execution / Information Disclosure
+* **AI/LLM-related:** No
+* **Description:** Apache Tomcat had a path equivalence vulnerability related to internal-dot file names. Under certain conditions, the issue could lead to remote code execution, information disclosure, or malicious content being added to uploaded files when the Default Servlet was write-enabled.
+* **Severity:** High
+* **Reason for severity:** The severity is High because Apache Tomcat is widely used for Java web applications. A vulnerability that may lead to remote code execution or information disclosure in a web server component can seriously affect confidentiality, integrity, and availability.
+* **Consequences:** Attackers could potentially read sensitive information, add malicious content to uploaded files, or execute code depending on server configuration. This could lead to data exposure, application compromise, or further attacks against the server.
+* **Solution:** Upgrade Apache Tomcat to a fixed version, disable unsafe write-enabled Default Servlet configurations, restrict upload behavior, validate file paths carefully, and review server configuration for risky defaults.
+
+#### 2.2.20 Defect 20 - Microsoft Edge Chromium-based remote code execution vulnerability
+* **Source:** [NVD - CVE-2026-45495](https://nvd.nist.gov/vuln/detail/CVE-2026-45495)
+* **Year:** 2026
+* **Type:** Remote Code Execution
+* **AI/LLM-related:** No
+* **Description:** Microsoft Edge Chromium-based versions had a remote code execution vulnerability identified as CVE-2026-45495. Browser remote code execution vulnerabilities are dangerous because they may be triggered through crafted web content or browser attack surfaces.
+* **Severity:** Critical
+* **Reason for severity:** The severity is Critical because Microsoft Edge is a widely used browser. If successfully exploited, a browser RCE vulnerability can allow attackers to execute code in the context of the browser user and potentially compromise the user's system.
+* **Consequences:** Attackers may execute malicious code, steal data, compromise browser sessions, install malware, or use the browser compromise as a starting point for further attacks.
+* **Solution:** Update Microsoft Edge to the latest patched version, enable automatic browser updates, use endpoint protection, avoid untrusted websites or suspicious links, and ensure enterprise browsers are centrally managed and patched quickly.
+
+---
+
+### 2.3 AI/LLM-related Defects Summary
+
+| No. | Defect Name | AI/LLM Issue Type | Why it is AI/LLM-related |
+| :--- | :--- | :--- | :--- |
+| 1 | RAG chatbot sometimes hallucinates because vector DB is not always queried | Hallucination / retrieval failure | The chatbot may generate unsupported answers when retrieval does not happen correctly. |
+| 2 | ChatGPT produced false legal citations in Mata v. Avianca | Hallucination | ChatGPT generated non-existent legal cases. |
+| 3 | Colorado lawyer filed motion with hallucinated ChatGPT cases | Hallucination | ChatGPT-generated citations were used in legal documents without verification. |
+| 4 | Bing Chat initial prompts revealed through prompt injection | Prompt injection | User prompts exposed hidden system instructions. |
+| 5 | Users bypassed ChatGPT content filters with prompt injection/personas | Prompt injection / safety bypass | Users manipulated the model to produce restricted or unsafe content. |
+| 6 | Chevrolet dealer chatbot agreed to sell a Tahoe for $1 | Prompt injection / business logic failure | The chatbot followed malicious user instructions instead of business rules. |
+| 7 | LangChain Web Explorer SSRF vulnerability | AI framework security defect | The vulnerability affected an Al application framework used for LLM retrieval workflows. |
+| 8 | LlamaIndex command injection via safe_eval | AI framework security defect | The vulnerability affected an LLM data framework and could be triggered through crafted input. |
+| 9 | LlamaIndex Core code injection vulnerability | AI framework security defect | The vulnerability affected the execution path of an AI data framework. |
+
+---
+
+### 2.4 AI Hallucination / Bias Finding
+
+* **AI Tool Used:** ChatGPT
+* **Model:** GPT-5.5 Thinking
+* **Prompt Time:** 20:53 30/05/2026
+* **Prompt:** Explain the RAG chatbot defect where a vector database is not always queried and the chatbot sometimes hallucinates despite an attached dataset. Include the root cause, consequences, and solution.
+* **Defect explained by AI:** The AI explained that the defect occurs due to poor RAG pipeline design, weak routing logic, missing fallback rules, or low similarity thresholds. Its proposed solution was to enforce retrieval, improve chunking, embeddings, and testing.
+* **AI output problem:** The AI's response is too generic and fails to address the core technical issue within the specific context of the OpenAI API (as discussed in the provided forum link). The user in the forum experienced discrepancies between the Playground (which worked fine) and the API (which hallucinated and skipped the vector DB). Instead of identifying the specific API configuration parameter causing the issue, the AI offered boilerplate advice for custom-built RAG systems.
+* **Why this is hallucination / bias:** This is an example of Generalization Bias. Instead of diagnosing the actual OpenAI API issue based on real-world behavior, the AI pieced together standard, general RAG concepts to generate an answer that sounds plausible but misses the mark completely for this context. It fabricated the need to fix "chunking" or "embeddings" when the real issue was simply an API configuration parameter.
+* **Corrected explanation:** 
+    * **Root cause:** When using the OpenAI Assistants API or Responses API, if the `tool_choice` parameter is set to its default (`"auto"`), the LLM has the autonomy to decide whether to call the `file_search` tool (Vector DB). If the model is overconfident in its internal training data, it will skip querying the database entirely.
+    * **Consequences:** The system behaves inconsistently. It might work perfectly in the OpenAI Playground but ignore the attached dataset when called via the API, causing the chatbot to fabricate information (hallucinate) rather than grounding its response in the provided files.
+    * **Solution:** Reconfigure the API call by changing the `tool_choice` parameter from `"auto"` to **`"required"`**. This strictly forces the LLM to use the `file_search` tool before generating a response. Additionally, refine the System Prompt to explicitly instruct the model to only answer using the retrieved context.
+**Evidence:**
+
+**AI output screenshot:**
+
+![AI output screenshot](../05_Software_Detects/ai_output_wrong.png)
+
+**Verified source screenshot:**
+
+![Verified source screenshot](../05_Software_Detects/verified_source.png)
+
+---
 
 # 3. Test cases for ONE physical product
