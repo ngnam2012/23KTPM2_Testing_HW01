@@ -633,12 +633,57 @@ Self-assessed grade:
 
 **AI output screenshot:**
 
-![AI output screenshot](../05_Software_Detects/ai_output_wrong.png)
+![AI output screenshot](../05_Software_Defects/ai_output_wrong.png)
 
 **Verified source screenshot:**
 
-![Verified source screenshot](../05_Software_Detects/verified_source.png)
+![Verified source screenshot](../05_Software_Defects/verified_source.png)
 
 ---
 
 # 3. Test cases for ONE physical product
+
+## 3.1 Test Product Information
+
+| Field | Value |
+| :--- | :--- |
+| File | HW01_TestCases_Checklist_TestSummary.xlsx |
+| Product | Air conditioner remote |
+| Serial | 777****981 |
+| Model | CS-C9KKH-8 |
+| Purpose | Test case design for one physical product in HW01 |
+
+**Product evidence:**
+
+![Physical product evidence](../06_Physical_Product_Evidence/Physical_Product_Evidence.jpg)
+
+## 3.2 Test Case Table
+
+| TC ID | Test Case Name | Test Type | Objective | Input | Precondition | Steps | Expected Result | Actual Result | Verdict | Executed? | Note / Evidence |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| TC01 | Power ON/OFF | Functional | Verify that the remote can turn the air conditioner on and off. | OFF/ON button | Air conditioner has power, remote batteries are working, and the remote is pointed at the air conditioner. | 1. Point the remote to the air conditioner.<br>2. Press the OFF/ON button once.<br>3. Press the OFF/ON button again to turn it off. | The air conditioner turns ON when pressed once and turns OFF when pressed again. The remote LCD updates the power status correctly. | The air conditioner is ON and turn off the status OFF on the remote when turn on. The air conditioner is OFF and turn on the status ON on the remote | Pass | Yes | https://youtube.com/shorts/XVdNk0y-0QQ?feature=share |
+| TC02 | Change to COOL mode | Functional | Verify that the remote can switch the air conditioner to COOL mode. | MODE button | Air conditioner has power, remote batteries are working, and the remote is pointed at the air conditioner. | 1. Turn on the air conditioner.<br>2. Press the MODE button until COOL mode is selected. | The remote displays COOL, and the air conditioner starts cooling the room. |  | Not Run | No |  |
+| TC03 | Change to DRY mode | Functional | Verify that the remote can switch the air conditioner to DRY mode. | MODE button | Air conditioner has power, remote batteries are working, and the remote is pointed at the air conditioner. | 1. Turn on the air conditioner.<br>2. Press the MODE button until DRY mode is selected. | The remote displays DRY, and the air conditioner works in dehumidifying mode. |  | Not Run | No |  |
+| TC04 | Change to AUTO mode | Functional | Verify that the remote can switch the air conditioner to AUTO mode. | MODE button | Air conditioner has power, remote batteries are working, and the remote is pointed at the air conditioner. | 1. Turn on the air conditioner.<br>2. Press the MODE button until AUTO mode is selected. | The remote displays AUTO, and the air conditioner automatically selects operation based on room temperature. |  | Not Run | No |  |
+| TC05 | Temperature increase | Functional | Verify that the temperature setting can be increased in COOL mode. | TEMP ▲ button | Air conditioner has power, remote batteries are working, and the remote is pointed at the air conditioner. COOL mode is selected. | 1. Set the air conditioner to COOL mode.<br>2. Press the TEMP ▲ button several times.<br>3. Observe the remote display and air conditioner response. | The temperature value on the remote increases step by step, and the air conditioner receives the new temperature setting. | The remote LCD updates the temperature and the air conditioner will make a sound when receive a signal | Pass | Yes | https://youtube.com/shorts/CsR09xZ4KAo |
+| TC06 | Temperature decrease | Functional | Verify that the temperature setting can be decreased in COOL mode. | TEMP ▼ button | Air conditioner has power, remote batteries are working, and the remote is pointed at the air conditioner. COOL mode is selected. | 1. Set the air conditioner to COOL mode.<br>2. Press the TEMP ▼ button several times.<br>3. Observe the remote display and air conditioner response. | The temperature value on the remote decreases step by step, and the air conditioner receives the new temperature setting. |  | Not Run | No |  |
+| TC07 | Minimum temperature limit | Boundary / Edge | Verify that the remote does not allow temperature lower than the supported minimum. | TEMP ▼ button | Air conditioner has power, remote batteries are working, and the remote is pointed at the air conditioner. COOL mode is selected. | 1. Set the air conditioner to COOL mode.<br>2. Keep pressing TEMP ▼ until the lowest temperature is reached.<br>3. Continue pressing TEMP ▼ and observe the display. | The remote should stop decreasing after the minimum supported temperature. No invalid temperature should be displayed. | The remote LCD will always at 16 degrees Celsius because it is the minimum tempertature and the air conditioner will not receive the decrease temperature signal | Pass | Yes | https://youtube.com/shorts/DaWT5-1l1As?feature=share |
+| TC08 | Maximum temperature limit | Boundary / Edge | Verify that the remote does not allow temperature higher than the supported maximum. | TEMP ▲ button | Air conditioner has power, remote batteries are working, and the remote is pointed at the air conditioner. COOL mode is selected. | 1. Set the air conditioner to COOL mode.<br>2. Keep pressing TEMP ▲ until the highest temperature is reached.<br>3. Continue pressing TEMP ▲ and observe the display. | The remote should stop increasing after the maximum supported temperature. No invalid temperature should be displayed. |  | Not Run | No |  |
+| TC09 | Fan speed control | Functional | Verify that the remote can change fan speed correctly. | FAN SPEED button | Air conditioner has power, remote batteries are working, and the remote is pointed at the air conditioner. | 1. Turn on the air conditioner.<br>2. Press the FAN SPEED button multiple times.<br>3. Observe the fan speed indicator on the remote and the air conditioner response. | Fan speed changes between available levels, and the remote LCD shows the correct fan speed indicator. | The remote LCD displays the levels of fan speed, and  send signal to the air conditioner to update the fan speed | Pass | Yes | https://youtube.com/shorts/6FwVlARvHeU |
+| TC10 | Air swing control | Functional | Verify that the remote can control the air swing/flap position. | AIR SWING button | Air conditioner has power, remote batteries are working, and the remote is pointed at the air conditioner. | 1. Turn on the air conditioner.<br>2. Press the AIR SWING button.<br>3. Press it again to change or stop the swing position.<br>4. Observe the flap movement and remote display. | The air conditioner flap moves according to the selected swing mode, and the remote displays the correct air swing indicator. | The remote LCD displays the correct the air swing indicator (except AUTO) and the air conditioner make a sound when receive the signal | Pass | Yes | https://youtube.com/shorts/XUOQSusSgWw?feature=share |
+| TC11 | Powerful / Quiet mode | Functional / Usability | Verify that the remote can switch between Powerful and Quiet operation modes. | POWERFUL/QUIET button | Air conditioner has power, remote batteries are working, and the remote is pointed at the air conditioner. | 1. Turn on the air conditioner.<br>2. Press the POWERFUL/QUIET button.<br>3. Observe Powerful mode behavior.<br>4. Press again to switch to Quiet mode if supported.<br>5. Observe noise and remote display. | In Powerful mode, the air conditioner cools faster. In Quiet mode, the fan noise becomes lower. The remote shows the correct mode status. |  | Not Run | No |  |
+| TC12 | Timer ON/OFF setting | Functional | Verify that Timer ON/OFF can be set and cancelled from the remote. | TIMER ON, TIMER OFF, SET, CANCEL buttons | Air conditioner has power, remote batteries are working, and the remote is pointed at the air conditioner. | 1. Press TIMER ON.<br>2. Choose a time using the number/time buttons.<br>3. Press SET.<br>4. Repeat with TIMER OFF.<br>5. Press CANCEL to remove the timer setting. | The remote displays the timer setting correctly, and the air conditioner turns ON or OFF at the scheduled time. Pressing CANCEL should remove the timer setting. |  | Not Run | No |  |
+| TC13 | Rapid temperature adjustment | Edge Case / Stress | Verify that the remote and air conditioner remain stable when temperature buttons are pressed rapidly. | TEMP ▲ and TEMP ▼ buttons | Air conditioner has power, remote batteries are working, and the remote is pointed at the air conditioner. COOL mode is selected. | 1. Set the air conditioner to COOL mode.<br>2. Press TEMP ▲ repeatedly and quickly for several seconds.<br>3. Press TEMP ▼ repeatedly and quickly for several seconds.<br>4. Observe the remote display and air conditioner response. | The remote should update temperature values correctly within the supported range. The air conditioner should not receive invalid settings or behave abnormally. |  | Not Run | No |  |
+| TC14 | Remote signal blocked | Edge Case | Verify behavior when the remote signal is blocked or not pointed directly at the air conditioner. | Any command button, e.g., OFF/ON or MODE | Air conditioner has power, remote batteries are working, and the remote is pointed at the air conditioner. | 1. Point the remote away from the air conditioner or block the remote sensor safely.<br>2. Press a command button.<br>3. Then point the remote directly at the air conditioner and press the same command again.<br>4. Observe the result. | When the signal is blocked, the air conditioner should not change state. When the remote is pointed correctly, the command should be received normally. |  | Not Run | No |  |
+| TC15 | Low battery / weak signal behavior | Edge Case / Reliability | Verify that the remote does not send incorrect commands when the battery is weak or the signal is unstable. | Remote with weak battery or increased distance | Air conditioner has power. Remote is tested from a longer distance or with visibly weak battery condition if safe and available. | 1. Try to send a simple command from a longer distance or with weak battery condition.<br>2. Observe the remote LCD and air conditioner response.<br>3. Repeat the command from normal distance with working batteries. | The remote should not display random or invalid settings. The air conditioner should only respond when a valid signal is received. |  | Not Run | No |  |
+
+## 3.3 Test Summary
+
+| Metric | Value |
+| :--- | :--- |
+| Total test cases | 15 |
+| Executed test cases | 5 |
+| Passed test cases | 5 |
+| Failed test cases | 0 |
+| Not Run test cases | 10 |
+| Blocked test cases | 0 |
